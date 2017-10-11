@@ -1,2 +1,12 @@
 pytube
 validators
+gmusicapi
+ffmpy
+oauth2client
+selenium
+pytest
+tox
+mock
+pytest-mock
+flask
+coverage

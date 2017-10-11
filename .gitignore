@@ -1,2 +1,8 @@
 .idea
-.pyc
+*.pyc
+public
+*.log
+htmlcov/
+.cache/
+.coverage
+tests/__pycache__/
