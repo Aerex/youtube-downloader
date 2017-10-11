@@ -6,7 +6,7 @@ import validators
 from subprocess import call
 
 class YoutubeDownloader(object):
-    validYoutubeTypes = ['mp4']
+
     def __init__(self, url):
         if not validators.url(url):
             raise StandardError('{0} is not a valid url'.format(url))
@@ -22,42 +22,38 @@ class YoutubeDownloader(object):
 
         videos = self.yt.filter(ext)
 
-        import json
-        print json.dumps(videos)
-
         highestresolution = 0
         lowestresolution = 90000
 
         for video in videos:
-            resolution = int(video['resolution'].replace("p", ""))
+            resolution = int(video.resolution.replace("p", ""))
             if quality == 'highest' and resolution > highestresolution:
                 highestresolution = resolution
                 continue
             elif quality == 'lowest' and resolution < lowestresolution:
                 lowestresolution = resolution
                 continue
-
-
         return lowestresolution if quality == 'lowest' else highestresolution
 
     def download(self, ext, quality, directory, callback=None):
+        validYoutubeTypes = ['mp4']
         if not self.yt:
             raise StandardError('YouTube is not defined')
 
         if not callback:
             raise StandardError('Callback needs to be set')
 
-        if ext in self.validYoutubeTypes:
+        if ext in validYoutubeTypes:
             resolution = str(self.__getVideoQuality(ext, quality)) + 'p'
             video = self.yt.get(ext, resolution)
 
             if directory[len(directory)-1] == '/':
                 directory = directory[0:len(directory)-1]
 
-            if not os.path.exists('{0}/{1}.{2}'.format(directory, video['filename'], ext)):
+            if not os.path.exists('{0}/{1}.{2}'.format(directory, video.filename, ext)):
                 video.download(directory, on_finish=callback)
             else:
-                callback('{0}/{1}.{2}'.format(directory, video['filename'], ext))
+                callback('{0}/{1}.{2}'.format(directory, video.filename, ext))
         else:
             raise StandardError('{0} is not a valid download media type')
 
@@ -82,10 +78,10 @@ class YoutubeDownloader(object):
             call(['rm', '-rf', '{0}/*'.format(path)])
 
 
-    def upload(self, library=None):
+    def upload(self, library=None, path='', match=False):
         if not library:
             raise StandardError('library module is not defined')
-        library.upload()
+        library.upload(path, match)
 
 
 
