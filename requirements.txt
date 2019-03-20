@@ -8,5 +8,6 @@ pytest
 tox
 mock
 pytest-mock
-flask
 coverage
+celery
+redis
